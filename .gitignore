@@ -1,2 +1,3 @@
 #Ignore the alignments directory
+#If using this tool, please use your own directory of downloaded IPD-IMGT/HLA alignment files
 resources/alignments
