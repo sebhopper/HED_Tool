@@ -13,7 +13,6 @@ def parse_alignments(gene, library_directory):
         #If the line doesn't begin with an allele name, skip over it
         if not ALLELE_NAME_REGEX.search(line):
             continue
-        
 
         line = re.split(r'[\t ]+', line.strip())
 
@@ -29,7 +28,7 @@ def parse_alignments(gene, library_directory):
                 reference = allele_name
                 break
 
-    return reformat_alignment(reference, alignment)
+    return reference, alignment
 
 
 def read_alignment_file(library_directory, gene):
@@ -57,8 +56,35 @@ def reformat_alignment(reference, alignment):
 
 def retrieve_required_alignments(patient_dict, library_directory):
 
+    gene_list = []
+
     for patient in patient_dict:
-        for key, values in patient.items():
+        alignments = {}
+        for _, values in patient['typing'].items():
+            for item in values:
+                gene_list.append(item.split('*')[0])
+
+        for gene in sorted(set(gene_list)):
+            reference, alignments = parse_alignments(gene, library_directory)
+            for hla_class in patient['typing'].items():
+                class_alignments = {}
+                for typing in hla_class[1]:
+                    if typing.split('*')[0] == gene:
+                    
+                    alignments[gene] = reference
+        
+        for hla_class in patient['typing'].items():
+            for typing in hla_class[1]:
+                gene = typing.split('*')[0] 
+                
+
+                        
+            # for classification in patient['typing'].items():
+
+# def build_alignment_list(alignments, allele_name):
+
+    
+
 
 
     # alignment_file = read_alignment_file(library_directory, gene)
