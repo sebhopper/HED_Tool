@@ -5,8 +5,9 @@ import argparse
 import pathlib
 
 #Project imports
-from utils.read import read
-from bio_utils.alignment_functions import parse_alignments, retrieve_required_alignments
+from HED_tool.utils.read import read
+from HED_tool.utils.build_alignments import build_alignments
+from HED_tool.core.calculate import calculate
 
 def main():
     """Main"""
@@ -14,12 +15,19 @@ def main():
     args = get_args()
 
     patient_data = read(args.input_file)
-    print(patient_data)
 
-    # alignments = parse_alignments('A', args.alignments)
-    retrieve_required_alignments(patient_data, args.alignments)
-
-
+    for patient in patient_data:
+        results = []
+        results.append({'patient_id': patient.get('patient_id'),
+                        })
+        allele_seqs = build_alignments(patient, args.alignments)
+        for allele in allele_seqs:
+            gene = list(allele.keys())[0].split('*')[0]
+            hed = calculate(allele)
+            results.append({'gene': gene,
+                            'HED': hed
+                            })
+        print(results)
 
 def get_args():
     """Create the Argument Parser"""
