@@ -3,3 +3,6 @@
 resources/alignments
 utils/alignment_parsing.py
 __pycache__/
+utils/build_example_files.py
+example_file2.txt
+example_file3.txt

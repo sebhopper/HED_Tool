@@ -5,6 +5,9 @@ Functions to read in the data and make it parsable for calculations.
 #Standard Imports
 import re
 
+#Project imports
+from HED_tool.utils.alignment_parsing import ALLELE_NAME_REGEX
+
 HLA_CLASS_I = ['A', 'B', 'C', 'E', 'F', 'G']
 HLA_CLASS_I_PSEUDO = ['H', 'J', 'K', 'L', 'M', 'N', 'P', 'R', 'S', 'T', 'U', 'V', 'W', 'Y']
 HLA_CLASS_II = ['DRA', 'DRB1',	'DRB2',	'DRB3',	'DRB4',	'DRB5',
@@ -31,12 +34,12 @@ def read_patient_data(patient_data_filepath):
 
     with open(patient_data_filepath, 'r', encoding='utf-8') as file:
         for line in file:
-            patients.append(process_patient_data(line))
+            patients.append(extract_patient_data(line))
 
     return patients
 
 
-def process_patient_data(line: str):
+def extract_patient_data(line: str):
     """Process the patient data line into a dict"""
 
     #Define possible separators that could have been included in the file
@@ -64,15 +67,22 @@ def process_patient_data(line: str):
     for key, hla_type in hla_categories.items():
         extracted_typing = extract_typing(remainder_of_line, hla_type)
         if extracted_typing:
-            line_dict['typing'][key] = extracted_typing
+            #Group typings by gene
+            gene_dict = {}
+            for typing in extracted_typing:
+                gene = typing.split('*')[0]
+                if gene not in gene_dict:
+                    gene_dict[gene] = []
+                gene_dict[gene].append(typing)
+            line_dict['typing'][key] = gene_dict
 
     return line_dict
 
 def extract_typing(typing_string: str, typing_to_extract: list):
     """ Function to use a regex to extract the typing information from the string """
 
-    pattern = r'(?:' + '|'.join(re.escape(gene) for gene in typing_to_extract) + r')\*\d+(?::\d+)*'
+    matches = re.findall(ALLELE_NAME_REGEX, typing_string)
 
-    matches =  re.findall(pattern, typing_string)
+    filtered_matches= [match for match in matches if match.split('*')[0] in typing_to_extract]
 
-    return matches
+    return filtered_matches

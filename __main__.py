@@ -6,27 +6,17 @@ import pathlib
 
 #Project imports
 from HED_tool.utils.read import read
-from HED_tool.utils.build_alignments import build_alignments
-from HED_tool.core.calculate import calculate
+from HED_tool.core.process_patient_alleles import process_patient
 
 def main():
-    """Main"""
+    """Main function"""
 
     args = get_args()
 
     patient_data = read(args.input_file)
 
     for patient in patient_data:
-        results = []
-        results.append({'patient_id': patient.get('patient_id'),
-                        })
-        allele_seqs = build_alignments(patient, args.alignments)
-        for allele in allele_seqs:
-            gene = list(allele.keys())[0].split('*')[0]
-            hed = calculate(allele)
-            results.append({'gene': gene,
-                            'HED': hed
-                            })
+        results = process_patient(patient, args.alignments, args.ard_status)
         print(results)
 
 def get_args():
@@ -38,6 +28,11 @@ def get_args():
     parser.add_argument('input_file',
                         type=pathlib.Path,
                         help="Input file containg typings")
+
+    parser.add_argument('ard_status',
+                        type=bool,
+                        default= True,
+                        help="True false are you analysing the ARD or full CDS, defaults to True which is ARD only") #pylint: disable=line-too-long
 
     parser.add_argument('alignments',
                         type=pathlib.Path,
