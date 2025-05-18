@@ -1,16 +1,21 @@
 """Build the required alignments"""
 import pathlib
+from pathlib import Path
 from HED_tool.utils.alignment_parsing import HEDAlignment, remove_pipes
 from HED_tool.utils.translate import translate_nt_to_prot
 from HED_tool.utils.process_indels import process_indels
 
 def build_alignments(patient_data:dict, alignments_directory:pathlib.Path, ARD:bool):
     """Function to build the required alignments"""
+        #Ensure alignments_directory is a Path object
+    if isinstance(alignments_directory, str):
+        alignments_directory = Path(alignments_directory)
+
     grouped_allele_seqs = {}  # {gene_prefix: {allele: protein_sequence}}
 
     for classification, genes in patient_data['typing'].items():
         for gene, typings in genes.items():
-            
+
             if any('N' in item for item in typings):
                 continue
             # Load the alignment file for the current gene
