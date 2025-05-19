@@ -46,30 +46,6 @@
 
 ---
 
-## Directory Structure
-
-HED_tool/
-├── __init__.py
-├── __main__.py
-├── core/
-│   ├── hed_calculate.py
-│   ├── process_patient_alleles.py
-├── utils/
-│   ├── alignment_parser_placeholder.py
-│   ├── alignment_parsing.py
-│   ├── build_alignments.py
-│   ├── categorise_allele.py
-├── resources/
-│   ├── aa_matrices.py
-│   ├── alignments/
-├── example_file.txt
-├── example_file2.txt
-├── example_file3.txt
-├── README.md
-├── requirements.txt
-
----
-
 ## Usage through the Command-Line Interface (CLI)
 Run the tool using the CLI:
  
@@ -91,19 +67,22 @@ This will bring up the help prompts for the tool.
 
 ## Example Input and Output
 ### Input:
-The input file should contain patient typings in the following format:
-	`P001 A*01:01 B*07:02 DRB1*15:01 DRB3*02:02 MICA*001 TAP1*02:01`
+The input file should contain patient typings in the following format:\n
+
+	`P001 A*01:01 B*07:02 DRB1*15:01 DRB3*02:02 MICA*001 TAP1*02:01`\n
+
 	`P002 A*03:01 B*08:01 C*07:02 DRB1*13:01 DQB1*05:01 TAP2*01:01`
 
 Where:
-	- Each line represents a patient.
-	- The first column includes the individual identifier.
-	- All subsequent columns are the HLA typings.
+- Each line represents a patient.
+- The first column includes the individual identifier.
+- All subsequent columns are the HLA typings.
 	
 I have included example_file.txt within this repository as an example input file.
 
 ### Output:
 The tool produces a dictionary with the following structure:
+```
 	{
     	'patient_id': 'P001',
     	'batch_results': {
@@ -119,6 +98,7 @@ The tool produces a dictionary with the following structure:
     	    {'gene': 'MICA', 'HED': 0.65}
     	]
 	}
+```
 
 ---
 
