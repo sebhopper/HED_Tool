@@ -55,6 +55,7 @@ Run the tool using the CLI:
 This will bring up the help prompts for the tool.
 
 ### Example command
+
 	```bash
 	python -m HED_tool example_file.txt True resources/alignments
 	```
@@ -67,9 +68,9 @@ This will bring up the help prompts for the tool.
 
 ## Example Input and Output
 ### Input:
-The input file should contain patient typings in the following format:\n
+The input file should contain patient typings in the following format:
 
-	`P001 A*01:01 B*07:02 DRB1*15:01 DRB3*02:02 MICA*001 TAP1*02:01`\n
+	`P001 A*01:01 B*07:02 DRB1*15:01 DRB3*02:02 MICA*001 TAP1*02:01`
 
 	`P002 A*03:01 B*08:01 C*07:02 DRB1*13:01 DQB1*05:01 TAP2*01:01`
 
